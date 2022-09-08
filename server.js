@@ -27,16 +27,18 @@ app.use('/api', postsRoutes);
 app.use('/api', usersRoutes);
 app.use('/api', statusesRoutes);
 
-app.use((req, res) => {
+app.use('/api', (req, res) => {
   res.status(404).send({ message: 'Not found...' });
 });
 
 const NODE_ENV = process.env.NODE_ENV;
+const DB_USER = process.env.DB_USER;
+const DB_PASSWORD = process.env.DB_PASSWORD;
 let dbURI = '';
 
-if (NODE_ENV === 'production') dbURI = 'url to remote db';
+if (NODE_ENV === 'production') dbURI = 'mongodb+srv://' + DB_USER + ':' + DB_PASSWORD + '@NAME.pjwrm.mongodb.net/?retryWrites=true&w=majority';
 else if (NODE_ENV === 'test') dbURI = 'mongodb://localhost:27017/bulletinBoardDBtest';
-else dbURI = 'mongodb://localhost:27017/bulletinBoardDB';
+else dbURI = 'mongodb://localhost:27017/bulletinBoardDBtest';
 
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
@@ -46,12 +48,9 @@ db.once('open', () => {
 });
 db.on('error', (err) => console.log('Error ' + err));
 
-// app.listen('8000', () => {
-//   console.log('Server is running on port: 8000');
-// });
-
-const server = app.listen('8000', () => {
-  console.log('Server is running on port: 8000');
+const port = process.env.PORT || '8000';
+const server = app.listen(port, () => {
+  console.log('Server is running on port: ' + port);
 });
 
 module.exports = server;
