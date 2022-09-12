@@ -5,6 +5,7 @@ import { Container } from 'react-bootstrap';
 import Header from "./components/features/Header/Header";
 import Footer from './components/features/Footer/Footer';
 import NotFound from './components/pages/NotFound/NotFound';
+import NoRights from './components/pages/NoRights/NoRights';
 import HomePage from './components/pages/HomePage/HomePage';
 import About from './components/pages/About/About';
 import PostAdd from './components/pages/PostAdd/PostAdd';
@@ -28,6 +29,7 @@ function App() {
           <Route path="/admin" element={<AdminHome />} />
           <Route path="/admin/edit/:id" element={<UserEdit />} />
           <Route path="/admin/add/" element={<UserAdd />} />
+          <Route path="/admin/warning/" element={<NoRights />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />

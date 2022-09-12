@@ -14,7 +14,7 @@ const AddUserForm = () => {
     navigate('/admin');
   };
 
-  return <UserForm action={handleSubmit} actionText="Add post" />;
+  return <UserForm action={handleSubmit} actionText="Add user" />;
 };
 
 export default AddUserForm;

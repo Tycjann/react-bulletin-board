@@ -4,15 +4,17 @@ import { useSelector } from 'react-redux';
 import { getUserById } from '../../../redux/usersRedux.js';
 
 const PostCard = ({ id, title, authorId, price, content, publishedDate }) => {
-
   const author = useSelector((state) => getUserById(state, authorId));
 
+  let authorName = '';
+  (author === undefined) ? authorName = 'undefined' : authorName = author.name;
+  
   return (
     <Card>
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         <Card.Subtitle className="mt-2">
-          Author: <span className="fw-normal">{author.name}</span>
+          Author: <span className="fw-normal">{authorName}</span>
         </Card.Subtitle>
         <Card.Subtitle className="mt-1 mb-2">
           Published: <span className="fw-normal">{publishedDate}</span>

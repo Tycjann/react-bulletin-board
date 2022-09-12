@@ -1,6 +1,6 @@
 import { Row, Col, Modal, Button } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { getAllUsers } from '../../../redux/usersRedux.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllUsers, removeUser, getUserById } from '../../../redux/usersRedux';
 import UserCard from '../../view/UserCard/UserCard';
 import dateToStr from '../../../utils/dateToStr.js';
 import { useNavigate } from 'react-router-dom';
@@ -11,22 +11,30 @@ const Users = () => {
   const navigate = useNavigate();
 
   const [show, setShow] = useState(false);
+  const [idDelete, setIdDelete] = useState(null);
+
+  const dispatch = useDispatch();
+  const users = useSelector(getAllUsers);
+  
+  const userById = useSelector((state) => getUserById(state, idDelete));
+  
 
   const handleDelete = () => {
     setShow(false);
     // security: no delete master admin
-    // dispatch(removeUser(userId));
-    navigate('/admin');
-    console.log('delete user');
-  };
-  const handleShow = () => {
-    setShow(true);
-  };
-  const handleClose = () => {
-    setShow(false);
+    userById.master === '0' ? dispatch(removeUser(idDelete)) : navigate('/admin/warning');
+    // console.log('delete user', userById.name);
   };
 
-  const users = useSelector(getAllUsers);
+  const handleShow = (id) => {
+    setShow(true);
+    setIdDelete(id);
+  };
+
+  const handleClose = () => {
+    setShow(false);
+    setIdDelete(null);
+  };
 
   return (
     <>
@@ -34,7 +42,7 @@ const Users = () => {
         <Modal.Header closeButton>
           <Modal.Title>Modal title</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Delete this post: ?</Modal.Body>
+        <Modal.Body>Delete this user: {userById ? userById.name : false} ?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close

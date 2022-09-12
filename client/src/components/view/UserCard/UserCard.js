@@ -16,7 +16,8 @@ const UserCard = ({ id, admin, master, email, name, addDate, handleShow }) => {
           Add: <span className="fw-normal">{addDate}</span>
         </Card.Subtitle>
         {master === '0' ? (
-          <Button variant="danger" onClick={handleShow}>
+          // <Button variant="danger" onClick={handleShow}>
+          <Button variant="danger" onClick={() => handleShow(id)}>
             Delete
           </Button>
         ) : (
