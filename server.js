@@ -38,7 +38,7 @@ let dbURI = '';
 
 if (NODE_ENV === 'production') dbURI = 'mongodb+srv://' + DB_USER + ':' + DB_PASSWORD + '@NAME.pjwrm.mongodb.net/?retryWrites=true&w=majority';
 else if (NODE_ENV === 'test') dbURI = 'mongodb://localhost:27017/bulletinBoardDBtest';
-else dbURI = 'mongodb://localhost:27017/bulletinBoardDBtest';
+else dbURI = 'mongodb://localhost:27017/bulletinBoardDB';
 
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
