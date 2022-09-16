@@ -1,27 +1,33 @@
 import { Col, Row, Button, Modal } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSinglePostById } from '../../../redux/postsRedux.js';
-import { getUserById } from '../../../redux/usersRedux.js';
-import { useState } from 'react';
+import { getPostById, removePostRequest, loadPostsRequest, getRequest } from '../../../redux/postsRedux.js';
+import { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { removePost } from '../../../redux/postsRedux.js';
+import AlertComponent from '../../common/AlertComponent/AlertComponent';
+import SpinnerComponent from '../../common/SpinnerComponent/SpinnerComponent';
+
 import dateToStr from '../../../utils/dateToStr.js';
+import authorName from '../../../utils/authorName.js';
 
 const PostDetails = ({ id }) => {
-  const post = useSelector((state) => getSinglePostById(state, id));
-
-  const author = useSelector((state) => getUserById(state, post.authorId));
-
   const dispatch = useDispatch();
-  
   const navigate = useNavigate();
-  
+
   const [show, setShow] = useState(false);
 
+  const post = useSelector((state) => getPostById(state, id));
+  const request = useSelector(getRequest);
+
+  // useEffect(() => {
+  //   dispatch(loadPostsRequest());
+  // }, [dispatch]);
+  
   const handleDelete = () => {
     setShow(false);
-    dispatch(removePost(post.id));
+    dispatch(removePostRequest(id));
+    console.log('id:', id);
     navigate('/');
   };
   const handleShow = () => {
@@ -31,8 +37,10 @@ const PostDetails = ({ id }) => {
     setShow(false);
   };
 
-  if (!post) return <Navigate to="/" />;
-  else
+  if (request.pending) return <SpinnerComponent />;
+  else if (request.error) return <AlertComponent text={request.error} color={'warning'} />;
+  else if (!request.success || !post) return <AlertComponent text={'No post'} color={'info'} />;
+  else if (request.success)
     return (
       <>
         <Row className="mb-2 justify-content-md-center">
@@ -66,7 +74,7 @@ const PostDetails = ({ id }) => {
         <Row className="justify-content-md-center">
           <Col xs={8} md={8} lg={8}>
             <p className="mb-0">
-              <span className="fw-bold">Author:</span> {author.name}
+              <span className="fw-bold">Author:</span> {authorName(post.authorId.name)}
             </p>
             <p className="mb-0">
               <span className="fw-bold">Published:</span> {dateToStr(post.publishedDate)}
@@ -86,6 +94,6 @@ const PostDetails = ({ id }) => {
         </Row>
       </>
     );
-};
+};;
 
 export default PostDetails;

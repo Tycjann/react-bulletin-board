@@ -1,15 +1,16 @@
 import { Row, Col, Form, FloatingLabel, Button } from 'react-bootstrap';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useForm } from 'react-hook-form';
 import ErrorTextValidate from '../../common/ErrorTextValidate/ErrorTextValidate.js';
-import { useSelector } from 'react-redux';
-import { getAllStatuses } from '../../../redux/statusesRedux.js';
+import { useSelector, useDispatch } from 'react-redux';
+import { getStatuses, loadStatusesRequest, getRequest } from '../../../redux/statusesRedux.js';
 
 const PostForm = ({ action, actionText, ...props }) => {
+
   const [title, setTitle] = useState(props.title || '');
   const [content, setContent] = useState(props.content || '');
   const [price, setPrice] = useState(props.price || '');
@@ -28,7 +29,13 @@ const PostForm = ({ action, actionText, ...props }) => {
     formState: { errors },
   } = useForm();
 
-  const statuses = useSelector(getAllStatuses);
+  const dispatch = useDispatch();
+  const statuses = useSelector(getStatuses);
+  const request = useSelector(getRequest);
+
+  useEffect(() => {
+    dispatch(loadStatusesRequest());
+  }, [dispatch]);
 
   const errorsMessages = {
     thisFieldRequired: 'This field is required',
@@ -76,7 +83,7 @@ const PostForm = ({ action, actionText, ...props }) => {
         <Col sm={11}>
           <DatePicker
             placeholder="Published"
-            selected={publishedDate}
+            // selected={publishedDate}
             value={publishedDate}
             onChange={setPublishedDate}
             className="mb-2 form-control"
@@ -97,8 +104,8 @@ const PostForm = ({ action, actionText, ...props }) => {
       >
         <option value="">Select status...</option>
         {statuses.map((status) => (
-          <option key={'' + status.id + ''} value={'' + status.id + ''}>
-            {status.status}
+          <option key={'' + status._id + ''} value={'' + status._id + ''}>
+            {status.name}
           </option>
         ))}
       </Form.Select>

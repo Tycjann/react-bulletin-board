@@ -4,11 +4,11 @@ exports.getAll = async (req, res) => {
   try {
     res.json(
       await Post
-        .find()
-        // .find({ statusId: '2' })
+        // .find()
+        .find({ statusId: '6315d9e01f4146b38b56c9c3' })
         .populate('authorId')
         .populate('statusId')
-        .select('id title authorId.name publishedDate price content')
+        // .select('id title authorId.name publishedDate price content')
         .sort({ publishedDate: -1 })
     );
   } catch (err) {

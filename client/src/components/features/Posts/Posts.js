@@ -1,40 +1,33 @@
-import { Row, Col, Spinner, ProgressBar, Alert } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getAllPublishedPosts, loadPublishedPostsRequest, getRequest } from '../../../redux/postsRedux.js';
+import { getPosts, loadPostsRequest, getRequest } from '../../../redux/postsRedux.js';
 import PostCard from '../../view/PostCard/PostCard';
+import AlertComponent from '../../common/AlertComponent/AlertComponent';
+import SpinnerComponent from '../../common/SpinnerComponent/SpinnerComponent';
 import dateToStr from '../../../utils/dateToStr.js';
 
 const Posts = () => {
   const dispatch = useDispatch();
-  const posts = useSelector(getAllPublishedPosts);
+  const posts = useSelector(getPosts);
   const request = useSelector(getRequest);
-  // console.log('posts:', posts);
 
   useEffect(() => {
-    dispatch(loadPublishedPostsRequest());
+    dispatch(loadPostsRequest());
   }, [dispatch]);
 
-  if (posts.length === 0) {
-    return (
-      <Spinner animation="grow" role="status" className="d-block mx-auto">
-        <span className="visually-hidden">Loading...</span>
-      </Spinner>
-    );
-  }
-
-  if (request.pending) return <ProgressBar animated now={70} className="mb-5" />;
-  else if (request.error) return <Alert color="warning">{request.error}</Alert>;
-  else if (!request.success || !posts.length) return <Alert color="info">No posts</Alert>;
+  if (request.pending) return <SpinnerComponent />;
+  else if (request.error) return <AlertComponent text={request.error} color={'warning'} />;
+  else if (!request.success || !posts.length) return <AlertComponent text={'No posts'} color={'info'} />;
   else if (request.success)
     return (
       <Row className="g-2">
         {posts.map((post) => (
-          <Col key={post.id} xs={12} md={6} lg={4}>
+          <Col key={post._id} xs={12} md={6} lg={4}>
             <PostCard
-              id={post.id}
+              id={post._id}
               title={post.title}
-              authorId={post.authorId}
+              author={post.authorId.name}
               price={post.price}
               content={post.content}
               publishedDate={dateToStr(post.publishedDate)}
