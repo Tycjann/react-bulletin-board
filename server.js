@@ -20,7 +20,7 @@ const app = express();
 // init session mechanism
 app.use(
   session({
-    secret: '374859SSkkd34ksffj350egsgs35t',
+    secret: process.env.sessionSecret,
     resave: true,
     saveUninitialized: true,
   })
