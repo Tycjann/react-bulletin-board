@@ -4,7 +4,6 @@ import { addPostRequest, loadPostsRequest } from '../../../redux/postsRedux.js';
 import { useNavigate } from 'react-router-dom';
 // import waitTimer from '../../../utils/waitTimer.js';
 
-
 const AddPostForm = () => {
   const dispatch = useDispatch();
   let navigate = useNavigate();

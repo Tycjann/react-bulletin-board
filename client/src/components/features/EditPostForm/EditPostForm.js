@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { editPostRequest } from '../../../redux/postsRedux.js';
 import { useParams } from 'react-router';
 import { useEffect } from 'react';

@@ -1,10 +1,9 @@
 import { Col, Row, Button, Modal } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPostById, removePostRequest, loadPostsRequest, getRequest } from '../../../redux/postsRedux.js';
-import { useState, useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { removePost } from '../../../redux/postsRedux.js';
+import { getPostById, removePostRequest, getRequest } from '../../../redux/postsRedux.js';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AlertComponent from '../../common/AlertComponent/AlertComponent';
 import SpinnerComponent from '../../common/SpinnerComponent/SpinnerComponent';
 
@@ -20,10 +19,6 @@ const PostDetails = ({ id }) => {
   const post = useSelector((state) => getPostById(state, id));
   const request = useSelector(getRequest);
 
-  // useEffect(() => {
-  //   dispatch(loadPostsRequest());
-  // }, [dispatch]);
-  
   const handleDelete = () => {
     setShow(false);
     dispatch(removePostRequest(id));
